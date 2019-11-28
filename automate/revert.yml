@@ -1,0 +1,23 @@
+---
+- name: Undeploy
+  hosts: "{{ env }}"
+  tasks:
+     - name: Check whether the undeploy script exists in targetFolder
+       stat:
+         path: "{{ targetFolder }}/deploy/undeploy.sh"
+       register: stat_result
+    
+     - name: Execute the undeploy script if it exists in targetFolder
+       action: shell cd {{ targetFolder }}; ./deploy/undeploy.sh {{ env }}
+       when: stat_result.stat.exists == True 
+     
+     - name: Check whether the deploy script exists in backupFolder
+       stat:
+         path: "{{ backupFolder }}/deploy/deploy.sh"
+       register: stat_result
+       
+     - name: Execute the deploy script if it exists in backupFolder
+       shell: cd {{ backupFolder }}; ./deploy/deploy.sh {{ env }}
+       register: cmd_out
+       when: stat_result.stat.exists == True 
+
