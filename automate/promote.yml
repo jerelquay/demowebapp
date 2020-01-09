@@ -1,5 +1,5 @@
 ---
-- name: Undeploy
+- name: Promote
   hosts: "{{ env }}"
   tasks:
      - name: Clean backup folder in target environment
